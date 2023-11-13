@@ -3,7 +3,7 @@
 
 ## Práctica 1 - Saludo y contadores
 
-Mostrar en la pantalla un botón con el texto "Saludar" y un texto vacío debajo de él. Todo centrado.
+- Mostrar en la pantalla un botón con el texto "Saludar" y un texto vacío debajo de él. Todo centrado.
 
 - Al hacer click en el botón, debe mostrar una ventana de diálogo con un texto como título en la parte superior derecha 
 que ponga "Configuración", con un tamaño de letra superior al resto.

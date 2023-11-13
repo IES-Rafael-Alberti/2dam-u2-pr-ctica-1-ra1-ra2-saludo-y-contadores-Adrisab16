@@ -3,13 +3,18 @@ package com.pmdm.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.pmdm.app.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    MainView()
                 }
             }
         }
@@ -30,17 +35,32 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainView() {
+    // Caja botón:
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp),
+        contentAlignment = Alignment.Center){
+        Button(onClick = { /* Do something */ }, modifier = Modifier
+            .padding(10.dp)) {
+            Text("Saludar")}
+    }
+
+    // Caja textview:
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp),
+        contentAlignment = Alignment.Center) {
+        Text(text = "Texto vacio")
+    }
+
+
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AppPreview() {
     AppTheme {
-        Greeting("Android")
+        MainView()
     }
 }
