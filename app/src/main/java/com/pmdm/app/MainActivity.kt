@@ -62,7 +62,6 @@ fun MainView() {
             Text(text = "TextVacuo")
         }
     }
-
 }
 
 @Preview(showBackground = true)
