@@ -4,8 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,7 +46,9 @@ fun MainView() {
         .padding(16.dp),
         contentAlignment = Alignment.Center){
         Button(onClick = { /* Do something */ }, modifier = Modifier
-            .padding(10.dp)) {
+            .padding(16.dp)
+            .height(50.dp)
+            .width(150.dp)) {
             Text("Saludar")}
     }
 
@@ -51,7 +57,7 @@ fun MainView() {
         .fillMaxSize()
         .padding(16.dp),
         contentAlignment = Alignment.Center) {
-        Text(text = "Texto vacio")
+        Text(text = "TextVacuo")
     }
 
 
