@@ -3,34 +3,19 @@ package com.pmdm.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pmdm.app.ui.theme.AppTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +25,9 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {MainView()}
+                ) {
+                    MainView()
+                }
             }
         }
     }
@@ -49,74 +35,150 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainView() {
-    // Estado para controlar si se muestra la vista secundaria
-    var showSecondaryView by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf("") }
+    var acceptCounter by remember { mutableStateOf(0) }
+    var cancelCounter by remember { mutableStateOf(0) }
 
-    Row {
-        // Caja botón:
-        Box(modifier = Modifier
+    Column(
+        modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 40.dp),
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Caja botón:
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .clickable { showDialog = true },
             contentAlignment = Alignment.Center
         ) {
-            // Mostrar la vista secundaria si showSecondaryView es true
-            if (showSecondaryView) {
-                // Al cerrar la vista secundaria, actualiza el estado para ocultarla
-                SecondaryView {showSecondaryView = false}
-            // Botón para mostrar la vista secundaria al hacer clic.Al hacer clic, actualiza el estado para mostrar la vista secundaria
-            } else {Button(onClick = {showSecondaryView = true},
-                    modifier = Modifier
-                        .height(50.dp)
-                        .width(150.dp)
-                ) {Text("Saludar")}
-            }
+            // Botón
+            Text(
+                text = "Saludar"
+            )
         }
-    }
-    Row {
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Caja textview:
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 60.dp),
+        Box(modifier = Modifier.fillMaxWidth().padding(16.dp),
             contentAlignment = Alignment.Center
-        ) {Text(text = "TextVacuo")}
+        ) {
+            // Texto MainView para saludar cuando pongan un valor.
+            Text(text = if (name.isNotEmpty()) "Hola, $name" else "")
+        }
+
+        // Ventana de diálogo
+        if (showDialog) {
+            SecondaryView(
+                name = name,
+                onAccept = {
+                    acceptCounter++
+                    name = it
+                    showDialog = false
+                },
+                onCancel = {
+                    cancelCounter++
+                    name = ""
+                    showDialog = false
+                },
+                onClear = { name = "" }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Contador de botones
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "A$acceptCounter C$cancelCounter",
+            )
+        }
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondaryView(onClose: () -> Unit) {
-    // Aquí pondremos la ventana emergente
-    // Al cerrar la vista secundaria, llama a la función onClose
-    var name by remember { mutableStateOf("") }
-    AlertDialog(onDismissRequest = {onClose()},
-        modifier = Modifier.fillMaxWidth(),
-        title = {Text("Configuracion")},
-        text = {Column(modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            // Etiqueta:
-            Text("Introduce tu nombre")
-            // Campo de texto para editar el nombre:
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                placeholder = { Text("Nombre")},
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+fun SecondaryView(
+    name: String,
+    onAccept: (String) -> Unit,
+    onCancel: () -> Unit,
+    onClear: () -> Unit
+) {
+    var newName by remember { mutableStateOf(name) }
+
+    AlertDialog(
+        onDismissRequest = {
+            onClear()
+            onCancel()
+        },
+        title = {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            )}
+                    .padding(top = 15.dp, bottom = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Configuración",
+                )
+            }
         },
-        // Al hacer click en Aceptar,
-        confirmButton = {TextButton(onClick = {}) {Text("Aceptar")}},
-        // Al hacer click en Cancelar, cierra la vista secundaria (el dialog)
-        dismissButton = {TextButton(onClick = {onClose()}) {Text("Cancelar")}}
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Introduce tu nombre",
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                // Campo de texto para editar el nombre:
+                TextField(
+                    value = newName,
+                    onValueChange = { newName = it },
+                    placeholder = { Text("Nombre") },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onAccept(newName)
+                }
+            ) {
+                Text("Aceptar")
+            }
+        },
+
+        dismissButton = {
+            TextButton(onClick = { onCancel() }) {
+                Text("Cancelar")
+            }
+        }
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
-    AppTheme {MainView()}
+    AppTheme {
+        MainView()
+    }
 }
