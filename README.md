@@ -5,10 +5,10 @@
 
 Check: Mostrar en la pantalla un botón con el texto "Saludar" y un texto vacío debajo de él. Todo centrado.
 
-- Al hacer click en el botón, debe mostrar una ventana de diálogo con un texto como título en la parte superior derecha 
+Check: Al hacer click en el botón, debe mostrar una ventana de diálogo con un texto como título en la parte superior derecha 
 que ponga "Configuración", con un tamaño de letra superior al resto.
 
-- Debajo, centrado en la ventana del diálogo, un texto para editar, con una etiqueta que muestre "Introduce tu nombre". 
+Check: Debajo, centrado en la ventana del diálogo, un texto para editar, con una etiqueta que muestre "Introduce tu nombre". 
 En la parte inferior, tres botones: Aceptar, Limpiar y Cancelar.
 
 - Aceptar debe cerrar la ventana de diálogo y aparecerá en el texto de la pantalla el mensaje "Hola, Nombre" 
