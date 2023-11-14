@@ -33,10 +33,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainView() {
-    var showDialog by remember { mutableStateOf(false) }
-    var name by remember { mutableStateOf("") }
-    var acceptCounter by remember { mutableStateOf(0) }
-    var cancelCounter by remember { mutableStateOf(0) }
+    var showDialog by remember {mutableStateOf(false)}
+    var name by remember {mutableStateOf("")}
+    var acceptCounter by remember {mutableStateOf(0)}
+    var cancelCounter by remember {mutableStateOf(0)}
 
     Row {
         // Caja botón:
@@ -76,23 +76,16 @@ fun MainView() {
                 cancelCounter++
                 showDialog = false
             },
-            onClear = { name = "" }
+            onClear = {name = ""}
         )
     }
 
     Spacer(modifier = Modifier.height(16.dp))
 
     // Contador de botones
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 50.dp),
+    Box(modifier = Modifier.fillMaxWidth().padding(top = 50.dp),
         contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "A$acceptCounter C$cancelCounter",
-        )
-    }
+    ) {Text(text = "A$acceptCounter C$cancelCounter")}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,6 +101,7 @@ fun SecondaryView(
     Dialog(onDismissRequest = {
         onClear()
         onCancel()
+        onClear()
     }) {Column(modifier = Modifier.fillMaxWidth().padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -117,9 +111,7 @@ fun SecondaryView(
             Spacer(modifier = Modifier.height(15.dp))
 
             // Etiqueta "Introduce tu nombre"
-            Text(
-                text = "Introduce tu nombre"
-            )
+            Text(text = "Introduce tu nombre")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -132,40 +124,21 @@ fun SecondaryView(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             )
-
             Spacer(modifier = Modifier.height(20.dp))
-
             // Botones Aceptar, Limpiar y Cancelar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
+            Row(modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // Botón "Aceptar"
-                TextButton(
-                    onClick = {
-                        onAccept(newName)
-                    }
-                ) {
-                    Text("Aceptar")
-                }
+                TextButton(onClick = {onAccept(newName)}) {Text("Aceptar")}
 
                 // Botón "Limpiar"
-                TextButton(onClick = {
-                    onClear()
-                }) {
-                    Text("Limpiar")
-                }
+                TextButton(onClick = {newName = ""}) {Text("Limpiar")}
 
                 // Botón "Cancelar"
-                TextButton(onClick = { onCancel() }) {
-                    Text("Cancelar")
-                }
+                TextButton(onClick = {onCancel()}) {Text("Cancelar")}
             }
         }
     }
@@ -174,7 +147,5 @@ fun SecondaryView(
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
-    AppTheme {
-        MainView()
-    }
+    AppTheme {MainView()}
 }

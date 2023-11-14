@@ -17,7 +17,7 @@ que se han pulsado los botones Aceptar y Cancelar... A1 C0
 
 Check: Si pulsa Cancelar, dejará de mostrar la ventana de diálogo y mostrará el texto de la pantalla vacío, pero actualizará el contador del botón... A1 C1.
 
-- El botón Limpiar, no cierra la ventana de diálogo, pero elimina el texto que se hubiera escrito en el texto editable del diálogo.
+Check: El botón Limpiar, no cierra la ventana de diálogo, pero elimina el texto que se hubiera escrito en el texto editable del diálogo.
 
 Check: A nivel de diseño de la ventana de diálogo, debe tener un padding de 15 dp en la parte superior y de 20 dp en la parte inferior.
 
