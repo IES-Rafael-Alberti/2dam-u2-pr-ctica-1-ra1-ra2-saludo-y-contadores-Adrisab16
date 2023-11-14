@@ -3,12 +3,14 @@ package com.pmdm.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -101,44 +103,52 @@ fun SecondaryView(
     Dialog(onDismissRequest = {
         onClear()
         onCancel()
-        onClear()
-    }) {Column(modifier = Modifier.fillMaxWidth().padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        onClear() }
+    ){
+        Box(
+            modifier = Modifier
+                .background(Color.White) // Establece el fondo blanco
+                .padding(15.dp) // Ajusta el relleno según sea necesario
         ) {
-            // Título Configuración
-            Text(text = "Configuración")
-
-            Spacer(modifier = Modifier.height(15.dp))
-
-            // Etiqueta "Introduce tu nombre"
-            Text(text = "Introduce tu nombre")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Campo de texto para editar el nombre:
-            TextField(
-                value = newName,
-                onValueChange = { newName = it },
-                placeholder = { Text("Nombre") },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            // Botones Aceptar, Limpiar y Cancelar
-            Row(modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+            // Contenido del diálogo aquí
+            Column(modifier = Modifier.fillMaxWidth().padding(15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Botón "Aceptar"
-                TextButton(onClick = {onAccept(newName)}) {Text("Aceptar")}
+                // Título Configuración
+                Text(text = "Configuración")
 
-                // Botón "Limpiar"
-                TextButton(onClick = {newName = ""}) {Text("Limpiar")}
+                Spacer(modifier = Modifier.height(15.dp))
 
-                // Botón "Cancelar"
-                TextButton(onClick = {onCancel()}) {Text("Cancelar")}
+                // Etiqueta "Introduce tu nombre"
+                Text(text = "Introduce tu nombre")
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Campo de texto para editar el nombre:
+                TextField(
+                    value = newName,
+                    onValueChange = { newName = it },
+                    placeholder = { Text("Nombre") },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                // Botones Aceptar, Limpiar y Cancelar
+                Row(modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    // Botón "Aceptar"
+                    TextButton(onClick = {onAccept(newName)}) {Text("Aceptar")}
+
+                    // Botón "Limpiar"
+                    TextButton(onClick = {newName = ""}) {Text("Limpiar")}
+
+                    // Botón "Cancelar"
+                    TextButton(onClick = {onCancel()}) {Text("Cancelar")}
+                }
             }
         }
     }
