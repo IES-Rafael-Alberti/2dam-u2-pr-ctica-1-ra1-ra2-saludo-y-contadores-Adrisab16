@@ -3,7 +3,6 @@ package com.pmdm.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -14,15 +13,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.pmdm.app.ui.theme.AppTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
@@ -40,67 +38,60 @@ fun MainView() {
     var acceptCounter by remember { mutableStateOf(0) }
     var cancelCounter by remember { mutableStateOf(0) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
+    Row {
         // Caja botón:
-        Box(
-            modifier = Modifier
-                .size(150.dp)
-                .clickable { showDialog = true },
-            contentAlignment = Alignment.Center
-        ) {
-            // Botón
-            Text(
-                text = "Saludar"
-            )
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 40.dp),
+            contentAlignment = Alignment.Center){
+            Button(onClick = {showDialog = true}, modifier = Modifier
+                .height(50.dp)
+                .width(150.dp)) {
+                Text("Saludar")}
         }
+    }
 
-        Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
+    Row {
         // Caja textview:
-        Box(modifier = Modifier.fillMaxWidth().padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            // Texto MainView para saludar cuando pongan un valor.
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 100.dp),
+            contentAlignment = Alignment.Center) {
             Text(text = if (name.isNotEmpty()) "Hola, $name" else "")
         }
+    }
 
-        // Ventana de diálogo
-        if (showDialog) {
-            SecondaryView(
-                name = name,
-                onAccept = {
-                    acceptCounter++
-                    name = it
-                    showDialog = false
-                },
-                onCancel = {
-                    cancelCounter++
-                    name = ""
-                    showDialog = false
-                },
-                onClear = { name = "" }
-            )
-        }
+    // Ventana de diálogo
+    if (showDialog) {
+        SecondaryView(
+            name = name,
+            onAccept = {
+                acceptCounter++
+                name = it
+                showDialog = false
+            },
+            onCancel = {
+                cancelCounter++
+                showDialog = false
+            },
+            onClear = { name = "" }
+        )
+    }
 
-        Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
-        // Contador de botones
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "A$acceptCounter C$cancelCounter",
-            )
-        }
+    // Contador de botones
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 50.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "A$acceptCounter C$cancelCounter",
+        )
     }
 }
 
@@ -114,65 +105,70 @@ fun SecondaryView(
 ) {
     var newName by remember { mutableStateOf(name) }
 
-    AlertDialog(
-        onDismissRequest = {
-            onClear()
-            onCancel()
-        },
-        title = {
+    Dialog(onDismissRequest = {
+        onClear()
+        onCancel()
+    }) {Column(modifier = Modifier.fillMaxWidth().padding(15.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Título Configuración
+            Text(text = "Configuración")
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            // Etiqueta "Introduce tu nombre"
+            Text(
+                text = "Introduce tu nombre"
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Campo de texto para editar el nombre:
+            TextField(
+                value = newName,
+                onValueChange = { newName = it },
+                placeholder = { Text("Nombre") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Botones Aceptar, Limpiar y Cancelar
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 15.dp, bottom = 20.dp),
+                    .padding(bottom = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "Configuración",
-                )
-            }
-        },
-        text = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Introduce tu nombre",
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                // Campo de texto para editar el nombre:
-                TextField(
-                    value = newName,
-                    onValueChange = { newName = it },
-                    placeholder = { Text("Nombre") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onAccept(newName)
+                // Botón "Aceptar"
+                TextButton(
+                    onClick = {
+                        onAccept(newName)
+                    }
+                ) {
+                    Text("Aceptar")
                 }
-            ) {
-                Text("Aceptar")
-            }
-        },
 
-        dismissButton = {
-            TextButton(onClick = { onCancel() }) {
-                Text("Cancelar")
+                // Botón "Limpiar"
+                TextButton(onClick = {
+                    onClear()
+                }) {
+                    Text("Limpiar")
+                }
+
+                // Botón "Cancelar"
+                TextButton(onClick = { onCancel() }) {
+                    Text("Cancelar")
+                }
             }
         }
-    )
+    }
 }
 
 @Preview(showBackground = true)
